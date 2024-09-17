@@ -1,6 +1,6 @@
 package br.com.correio.gerenciamento.domain.packs;
 
-import org.springframework.data.repository.Repository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public class PackRepository implements Repository<Pack, Long> {
+public interface PackRepository extends JpaRepository<Pack, Long> {
 }
