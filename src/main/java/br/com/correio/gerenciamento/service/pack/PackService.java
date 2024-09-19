@@ -1,7 +1,10 @@
 package br.com.correio.gerenciamento.service.pack;
 
+import br.com.correio.gerenciamento.domain.delivery.DeliveryPackDTO;
 import br.com.correio.gerenciamento.domain.packs.DTO.UpdatePackDTO;
 import br.com.correio.gerenciamento.domain.packs.Pack;
+
+import java.time.LocalDate;
 
 public class PackService {
 
@@ -20,5 +23,9 @@ public class PackService {
         }
     }
 
-
+    public void doDeliveryPack(Pack pack, DeliveryPackDTO dto){
+        pack.setDeliveredTo(dto.deliveredTo());
+        pack.setDeliveryDay(LocalDate.now());
+        pack.setDelivered(true);
+    }
 }

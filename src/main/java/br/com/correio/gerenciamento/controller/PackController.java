@@ -8,12 +8,18 @@ import br.com.correio.gerenciamento.domain.packs.DTO.DetailsPackDTO;
 import br.com.correio.gerenciamento.service.pack.PackService;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
+import org.hibernate.query.Page;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.awt.print.Pageable;
+import java.util.List;
+
 
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping("/packs")
 public class PackController {
 
@@ -42,6 +48,15 @@ public class PackController {
         DetailsPackDTO packDTO = new DetailsPackDTO(pack);
 
         return ResponseEntity.ok(packDTO);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<DetailsPackDTO>> listPacks(){
+
+        var packs = repository.findAll();
+        var packsDto = packs.stream().map(DetailsPackDTO::new).toList();
+
+        return ResponseEntity.ok(packsDto);
     }
 
     @PostMapping("/{id}")
