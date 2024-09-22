@@ -1,7 +1,7 @@
 package br.com.correio.gerenciamento.domain.packs;
 
 import br.com.correio.gerenciamento.domain.packs.DTO.CreatePackDTO;
-import br.com.correio.gerenciamento.domain.packs.oms.OMS.OMS;
+import br.com.correio.gerenciamento.domain.OMS.OMS;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;

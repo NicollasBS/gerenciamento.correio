@@ -1,4 +1,4 @@
-package br.com.correio.gerenciamento.domain.packs.oms.OMS;
+package br.com.correio.gerenciamento.domain.OMS;
 
 public enum OMS {
     BASE,

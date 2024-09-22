@@ -1,7 +1,7 @@
 package br.com.correio.gerenciamento.domain.packs.DTO;
 
 import br.com.correio.gerenciamento.domain.packs.Pack;
-import br.com.correio.gerenciamento.domain.packs.oms.OMS.OMS;
+import br.com.correio.gerenciamento.domain.OMS.OMS;
 
 import java.time.LocalDate;
 
