@@ -4,7 +4,7 @@ import br.com.correio.gerenciamento.domain.OMS.OMS;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-public record PostListCreateDTO(
+public record CreatePostListDTO(
         @NotBlank
         String sender,
         @NotBlank

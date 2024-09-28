@@ -27,6 +27,7 @@ public class Pack {
 
     private String trackingCode;
     private LocalDate arrivalDay;
+
     private LocalDate deliveryDay;
     private String deliveredTo;
     private boolean delivered;

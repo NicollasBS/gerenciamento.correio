@@ -1,5 +1,6 @@
 package br.com.correio.gerenciamento.controller;
 
+import br.com.correio.gerenciamento.domain.delivery.DeliveryPackDTO;
 import br.com.correio.gerenciamento.domain.packs.DTO.CreatePackDTO;
 import br.com.correio.gerenciamento.domain.packs.DTO.UpdatePackDTO;
 import br.com.correio.gerenciamento.domain.packs.Pack;
@@ -23,6 +24,8 @@ public class PackController {
 
     @Autowired
     PackRepository repository;
+
+    PackService service = new PackService();
 
     @PostMapping
     @Transactional
@@ -83,5 +86,46 @@ public class PackController {
 
         return ResponseEntity.noContent().build();
     }
+
+//    funcionalidade de delivery dos packs
+
+    @Transactional
+    @PatchMapping("/delivery/{id}")
+    public void doDeliveryPack(@PathVariable Long id, @RequestBody  @Valid DeliveryPackDTO dto){
+
+        Pack pack = repository.getReferenceById(id);
+
+        service.doDeliveryPack(pack, dto.deliveredTo());
+
+    }
+
+    @Transactional
+    @PostMapping("/delivery/multi")
+    public void doDeliveryMultiPacks(@RequestBody @Valid DeliveryPackDTO.DeliveryMultiPacksDTO dto){
+        for(Long id : dto.ids()){
+            Pack pack = repository.getReferenceById(id);
+
+            service.doDeliveryPack(pack, dto.deliveredTo());
+        }
+    }
+
+    @GetMapping("/delivery/pedent")
+    public ResponseEntity<List<DetailsPackDTO>> listNotDelivered(){
+        List<Pack> packsNotDelivered = repository.findAllByDeliveredFalse();
+
+        var packsNotDeliveredDTO = packsNotDelivered.stream().map(DetailsPackDTO::new).toList();
+
+        return ResponseEntity.ok(packsNotDeliveredDTO);
+    }
+
+    @GetMapping("/delivery/delivered")
+    public ResponseEntity<List<DetailsPackDTO>> listDelivered(){
+        List<Pack> packsNotDelivered = repository.findAllByDeliveredTrue();
+
+        var packsNotDeliveredDTO = packsNotDelivered.stream().map(DetailsPackDTO::new).toList();
+
+        return ResponseEntity.ok(packsNotDeliveredDTO);
+    }
+
 }
 

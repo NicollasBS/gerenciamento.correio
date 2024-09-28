@@ -1,7 +1,7 @@
 package br.com.correio.gerenciamento.domain.postlist;
 
 import br.com.correio.gerenciamento.domain.OMS.OMS;
-import br.com.correio.gerenciamento.domain.postlist.DTO.PostListCreateDTO;
+import br.com.correio.gerenciamento.domain.postlist.DTO.CreatePostListDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -22,14 +22,14 @@ public class PostListItem {
     private String sender;
     private String recipient;
     private String trackingCode;
-    @Enumerated
+    @Enumerated(value = EnumType.STRING)
     private OMS om;
     private LocalDate arrivalDay;
     private LocalDate departureDay;
     @Column(name = "out_verify")
     private boolean out;
 
-    public PostListItem(PostListCreateDTO dto){
+    public PostListItem(CreatePostListDTO dto){
         this.sender = dto.sender();
         this.recipient = dto.recipient();
         this.trackingCode = dto.trackingCode();
