@@ -28,6 +28,8 @@ public class PostListItem {
     private LocalDate departureDay;
     @Column(name = "out_verify")
     private boolean out;
+    private boolean ar;
+    private String cep;
 
     public PostListItem(CreatePostListDTO dto){
         this.sender = dto.sender();
@@ -35,6 +37,8 @@ public class PostListItem {
         this.trackingCode = dto.trackingCode();
         this.om = dto.om();
         this.arrivalDay = LocalDate.now();
+        this.cep = dto.cep();
         this.out = false;
+        this.ar = dto.ar();
     }
 }

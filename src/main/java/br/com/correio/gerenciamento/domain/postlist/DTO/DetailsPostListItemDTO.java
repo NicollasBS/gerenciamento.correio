@@ -13,10 +13,12 @@ public record DetailsPostListItemDTO(
         OMS om,
         LocalDate arrivalDay,
         LocalDate departureDay,
-        boolean out
+        boolean out,
+        boolean ar,
+        String cep
 ) {
     public DetailsPostListItemDTO(PostListItem postListItem){
         this(postListItem.getId(), postListItem.getSender(), postListItem.getRecipient(), postListItem.getTrackingCode(), postListItem.getOm(),
-        postListItem.getArrivalDay(), postListItem.getDepartureDay(), postListItem.isOut());
+        postListItem.getArrivalDay(), postListItem.getDepartureDay(), postListItem.isOut(), postListItem.isAr(), postListItem.getCep());
     }
 }

@@ -1,0 +1,1 @@
+alter table post_list_itens ADD cep varchar(10) not null;

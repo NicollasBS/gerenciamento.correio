@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping("/postlist")
 public class PostListController {
 
@@ -26,13 +27,15 @@ public class PostListController {
 
     @PostMapping
     @Transactional
-    public ResponseEntity create(@RequestBody @Valid CreatePostListDTO dto){
+    public ResponseEntity<DetailsPostListItemDTO> create(@RequestBody @Valid CreatePostListDTO dto){
 
         PostListItem postListItem = new PostListItem(dto);
 
         repository.save(postListItem);
 
-        return ResponseEntity.ok().build();
+        DetailsPostListItemDTO dtoReturn = new DetailsPostListItemDTO(postListItem);
+
+        return ResponseEntity.ok(dtoReturn);
     }
 
     @GetMapping ("/{id}")
@@ -50,7 +53,7 @@ public class PostListController {
         return ResponseEntity.ok(dto);
     }
 
-    @PatchMapping("{id}")
+    @PutMapping("{id}")
     @Transactional
     public ResponseEntity<DetailsPostListItemDTO> update(@PathVariable Long id,
             @RequestBody @Valid UpdatePostListItemDTO dto){

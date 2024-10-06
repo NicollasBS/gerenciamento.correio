@@ -1,5 +1,6 @@
 package br.com.correio.gerenciamento.controller;
 
+import br.com.correio.gerenciamento.domain.OMS.OMS;
 import br.com.correio.gerenciamento.domain.delivery.DeliveryPackDTO;
 import br.com.correio.gerenciamento.domain.packs.DTO.CreatePackDTO;
 import br.com.correio.gerenciamento.domain.packs.DTO.UpdatePackDTO;
@@ -14,6 +15,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
 
@@ -127,5 +130,22 @@ public class PackController {
         return ResponseEntity.ok(packsNotDeliveredDTO);
     }
 
-}
+//    ====================== SFPC ======================================
+    @GetMapping("/sfpc/pendent")
+    public ResponseEntity<List<DetailsPackDTO>> listSFPCNotDelivered(){
+        List<Pack> pendentSFPC = repository.findByOmAndDeliveredFalse(OMS.SFPC);
 
+        List<DetailsPackDTO> dto = pendentSFPC.stream().map(DetailsPackDTO::new).toList();
+
+        return ResponseEntity.ok(dto);
+    }
+
+    @GetMapping("/5rm/pendent")
+    public ResponseEntity<List<DetailsPackDTO>> list5RMNotDelivered(){
+        List<Pack> pendentSFPC = repository.findByOmAndDeliveredFalse(OMS.CMDO5RM);
+
+        List<DetailsPackDTO> dto = pendentSFPC.stream().map(DetailsPackDTO::new).toList();
+
+        return ResponseEntity.ok(dto);
+    }
+}

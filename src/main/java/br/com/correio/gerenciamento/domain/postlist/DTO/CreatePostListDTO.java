@@ -12,6 +12,10 @@ public record CreatePostListDTO(
         @NotBlank
         String trackingCode,
         @NotNull
-        OMS om
+        OMS om,
+        @NotNull
+        boolean ar,
+        @NotNull
+        String cep
 ) {
 }
