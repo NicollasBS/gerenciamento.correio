@@ -1,0 +1,1 @@
+alter table post_list_itens ADD description varchar(255);

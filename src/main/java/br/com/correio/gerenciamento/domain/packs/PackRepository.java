@@ -14,4 +14,7 @@ public interface PackRepository extends JpaRepository<Pack, Long> {
 
     @Query("SELECT p FROM Pack p WHERE p.om = :om AND p.delivered = false")
     List<Pack> findByOmAndDeliveredFalse(OMS om);
+
+    @Query("SELECT p FROM Pack p WHERE p.om = :om AND p.delivered = true")
+    List<Pack> findByOmAndDeliveredTrue(OMS om);
 }

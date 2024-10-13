@@ -20,6 +20,9 @@ public class PackService {
         if(!dto.trackingCode().isBlank()){
             pack.setTrackingCode(dto.trackingCode());
         }
+        if(dto.description() != null){
+            pack.setDescription(dto.description());
+        }
     }
 
     public void doDeliveryPack(Pack pack, String deliveredTo){

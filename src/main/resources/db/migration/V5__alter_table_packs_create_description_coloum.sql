@@ -1,0 +1,1 @@
+alter table packs ADD description varchar(255);

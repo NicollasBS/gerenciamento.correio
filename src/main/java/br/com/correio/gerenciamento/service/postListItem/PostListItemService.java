@@ -18,6 +18,15 @@ public class PostListItemService {
         if(!dto.trackingCode().isBlank()){
             pli.setTrackingCode(dto.trackingCode());
         }
+        if(!dto.cep().isBlank()){
+            pli.setCep(dto.cep());
+        }
+        if(dto.ar().describeConstable().isEmpty()){
+            pli.setAr(dto.ar());
+        }
+        if(dto.description() != null){
+            pli.setDescription(dto.description());
+        }
     }
 
     public void makeOut(PostListItem pli){

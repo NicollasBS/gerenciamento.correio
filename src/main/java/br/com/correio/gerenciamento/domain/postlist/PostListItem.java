@@ -30,6 +30,7 @@ public class PostListItem {
     private boolean out;
     private boolean ar;
     private String cep;
+    private String description;
 
     public PostListItem(CreatePostListDTO dto){
         this.sender = dto.sender();
@@ -38,6 +39,7 @@ public class PostListItem {
         this.om = dto.om();
         this.arrivalDay = LocalDate.now();
         this.cep = dto.cep();
+        this.description = dto.description();
         this.out = false;
         this.ar = dto.ar();
     }

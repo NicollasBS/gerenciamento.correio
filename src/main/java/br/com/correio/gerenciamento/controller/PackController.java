@@ -140,6 +140,26 @@ public class PackController {
         return ResponseEntity.ok(dto);
     }
 
+    @GetMapping("/sfpc/delivered")
+    public ResponseEntity<List<DetailsPackDTO>> listSFPCDelivered(){
+        List<Pack> deliveredSFPC = repository.findByOmAndDeliveredTrue(OMS.SFPC);
+
+        List<DetailsPackDTO> dto = deliveredSFPC.stream().map(DetailsPackDTO::new).toList();
+
+        return ResponseEntity.ok(dto);
+    }
+
+    @PostMapping("/sfpc/delivery")
+    @Transactional
+    public void doDeliveryMultPacksSFPC(@RequestBody @Valid DeliveryPackDTO.DeliveryMultiPacksDTO deliveryMultiPacksDTO){
+        for(Long id : deliveryMultiPacksDTO.ids()){
+            Pack pack = repository.getReferenceById(id);
+
+            service.doDeliveryPack(pack, deliveryMultiPacksDTO.deliveredTo());
+        }
+    }
+
+//    ====================== RM ======================================
     @GetMapping("/5rm/pendent")
     public ResponseEntity<List<DetailsPackDTO>> list5RMNotDelivered(){
         List<Pack> pendentSFPC = repository.findByOmAndDeliveredFalse(OMS.CMDO5RM);
@@ -147,5 +167,24 @@ public class PackController {
         List<DetailsPackDTO> dto = pendentSFPC.stream().map(DetailsPackDTO::new).toList();
 
         return ResponseEntity.ok(dto);
+    }
+
+    @GetMapping("/5rm/delivered")
+    public ResponseEntity<List<DetailsPackDTO>> list5RMDelivered(){
+        List<Pack> delivered5RM = repository.findByOmAndDeliveredTrue(OMS.CMDO5RM);
+
+        List<DetailsPackDTO> dto = delivered5RM.stream().map(DetailsPackDTO::new).toList();
+
+        return ResponseEntity.ok(dto);
+    }
+
+    @PostMapping("/5rm/delivery")
+    @Transactional
+    public void doDeliveryMultiPack5RM(@RequestBody @Valid DeliveryPackDTO.DeliveryMultiPacksDTO deliveryMultiPacksDTO){
+        for (Long id : deliveryMultiPacksDTO.ids()){
+            Pack pack = repository.getReferenceById(id);
+
+            service.doDeliveryPack(pack, deliveryMultiPacksDTO.deliveredTo());
+        }
     }
 }

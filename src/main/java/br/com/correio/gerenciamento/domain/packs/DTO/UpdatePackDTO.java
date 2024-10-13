@@ -6,6 +6,7 @@ public record UpdatePackDTO(
         String sender,
         String recipient,
         OMS om,
-        String trackingCode
+        String trackingCode,
+        String description
 ) {
 }

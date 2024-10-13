@@ -16,6 +16,7 @@ public record CreatePostListDTO(
         @NotNull
         boolean ar,
         @NotNull
-        String cep
+        String cep,
+        String description
 ) {
 }

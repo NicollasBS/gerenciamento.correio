@@ -14,12 +14,13 @@ public record DetailsPackDTO(
         LocalDate arrivalDay,
         LocalDate deliveryDay,
         String deliveredTo,
-        boolean delivered
+        boolean delivered,
+        String description
 ) {
 
     public DetailsPackDTO(Pack p) {
         this(p.getId(), p.getSender(), p.getRecipient(), p.getOm(),
         p.getTrackingCode(), p.getArrivalDay(), p.getDeliveryDay(),
-        p.getDeliveredTo(), p.isDelivered());
+        p.getDeliveredTo(), p.isDelivered(), p.getDescription());
     }
 }
