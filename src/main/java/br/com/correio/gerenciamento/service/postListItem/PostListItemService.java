@@ -31,4 +31,9 @@ public class PostListItemService {
         pli.setDepartureDay(LocalDate.now());
         pli.setOut(true);
     }
+
+    public void doReturnItem(PostListItem pli){
+        pli.setDepartureDay(null);
+        pli.setOut(false);
+    }
 }

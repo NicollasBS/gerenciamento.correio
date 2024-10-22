@@ -86,6 +86,13 @@ public class PostListController {
         service.makeOut(postListItem);
     }
 
+    @GetMapping("/return/{id}")
+    @Transactional
+    public void doReturnIten(@PathVariable Long id){
+        PostListItem pli = repository.getReferenceById(id);
+        service.doReturnItem(pli);
+    }
+
     @PostMapping("/makeout/out")
     @Transactional
     public void makeMultiOut(@RequestBody @Valid MakeMultiOut dto){

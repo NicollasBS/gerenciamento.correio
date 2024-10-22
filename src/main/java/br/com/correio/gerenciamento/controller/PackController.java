@@ -159,6 +159,13 @@ public class PackController {
         }
     }
 
+    @PostMapping("/return/{id}")
+    @Transactional
+    public void doReturnPack(@PathVariable Long id){
+        Pack pack = repository.getReferenceById(id);
+
+        service.doReturnPack(pack);
+    }
 //    ====================== RM ======================================
     @GetMapping("/5rm/pendent")
     public ResponseEntity<List<DetailsPackDTO>> list5RMNotDelivered(){

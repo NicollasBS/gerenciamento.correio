@@ -31,4 +31,9 @@ public class PackService {
         pack.setDelivered(true);
     }
 
+    public void doReturnPack(Pack pack){
+        pack.setDeliveredTo(null);
+        pack.setDeliveryDay(null);
+        pack.setDelivered(false);
+    }
 }
