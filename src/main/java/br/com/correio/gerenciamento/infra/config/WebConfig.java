@@ -1,6 +1,5 @@
-package br.com.correio.gerenciamento.infra;
+package br.com.correio.gerenciamento.infra.config;
 
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
