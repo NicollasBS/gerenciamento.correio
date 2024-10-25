@@ -7,7 +7,12 @@ import br.com.correio.gerenciamento.domain.packs.DTO.UpdatePackDTO;
 import br.com.correio.gerenciamento.domain.packs.Pack;
 import br.com.correio.gerenciamento.domain.packs.PackRepository;
 import br.com.correio.gerenciamento.domain.packs.DTO.DetailsPackDTO;
+import br.com.correio.gerenciamento.infra.security.SecurityConfigurations;
+import br.com.correio.gerenciamento.infra.security.SecurityFilter;
+import br.com.correio.gerenciamento.infra.security.TokenService;
 import br.com.correio.gerenciamento.service.pack.PackService;
+import br.com.correio.gerenciamento.service.postListItem.log.LogService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,9 +31,13 @@ import java.util.List;
 public class PackController {
 
     @Autowired
-    PackRepository repository;
+    private PackRepository repository;
 
-    PackService service = new PackService();
+
+    private final LogService logService = new LogService();
+
+    private final PackService service = new PackService();
+
 
     @PostMapping
     @Transactional
@@ -195,3 +204,4 @@ public class PackController {
         }
     }
 }
+

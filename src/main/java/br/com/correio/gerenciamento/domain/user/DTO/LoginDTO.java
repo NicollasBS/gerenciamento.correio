@@ -1,4 +1,4 @@
-package br.com.correio.gerenciamento.domain.user.DTO.loginDTO;
+package br.com.correio.gerenciamento.domain.user.DTO;
 
 import jakarta.validation.constraints.NotBlank;
 

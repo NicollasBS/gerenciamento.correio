@@ -1,9 +1,11 @@
 package br.com.correio.gerenciamento.controller;
 
+import br.com.correio.gerenciamento.domain.user.DTO.LoginResponseDTO;
 import br.com.correio.gerenciamento.domain.user.DTO.RegisterDTO;
-import br.com.correio.gerenciamento.domain.user.DTO.loginDTO.LoginDTO;
+import br.com.correio.gerenciamento.domain.user.DTO.LoginDTO;
 import br.com.correio.gerenciamento.domain.user.User;
 import br.com.correio.gerenciamento.domain.user.UserRepository;
+import br.com.correio.gerenciamento.infra.security.TokenService;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,20 +23,27 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthenticationController {
 
     @Autowired
-    AuthenticationManager authenticationManager;
+    private AuthenticationManager authenticationManager;
 
     @Autowired
-    UserRepository repository;
+    private UserRepository repository;
+
+    @Autowired
+    private TokenService tokenService;
 
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody @Valid LoginDTO loginDTO){
-        //validando usuário e senha
+        //validando usuário e senha ->
         var usernamePassword = new UsernamePasswordAuthenticationToken(loginDTO.login(), loginDTO.password());
 
         //autenticando o usuário
-        var auth = this.authenticationManager.authenticate(usernamePassword);
+        var auth = authenticationManager.authenticate(usernamePassword);
 
-        return ResponseEntity.ok().build();
+        //gerando o token de acesso do usuário
+        var token = tokenService.generateToken((User) auth.getPrincipal());
+
+        //retorna o token como um JSON
+        return ResponseEntity.ok(new LoginResponseDTO(token));
     }
 
     @Transactional
