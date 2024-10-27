@@ -1,11 +1,13 @@
 package br.com.correio.gerenciamento.controller;
 
+import br.com.correio.gerenciamento.domain.logs.Objects.enums.OperationType;
 import br.com.correio.gerenciamento.domain.postlist.DTO.DetailsPostListItemDTO;
 import br.com.correio.gerenciamento.domain.postlist.DTO.CreatePostListDTO;
 import br.com.correio.gerenciamento.domain.postlist.DTO.MakeMultiOut;
 import br.com.correio.gerenciamento.domain.postlist.DTO.UpdatePostListItemDTO;
 import br.com.correio.gerenciamento.domain.postlist.PostListItem;
 import br.com.correio.gerenciamento.domain.postlist.PostListItemRepository;
+import br.com.correio.gerenciamento.service.logs.LogService;
 import br.com.correio.gerenciamento.service.postListItem.PostListItemService;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
@@ -21,9 +23,12 @@ import java.util.List;
 public class PostListController {
 
     @Autowired
-    PostListItemRepository repository;
+    private PostListItemRepository repository;
 
-    PostListItemService service = new PostListItemService();
+    @Autowired
+    private LogService logService;
+
+    private PostListItemService service = new PostListItemService();
 
     @PostMapping
     @Transactional
@@ -31,9 +36,12 @@ public class PostListController {
 
         PostListItem postListItem = new PostListItem(dto);
 
-        repository.save(postListItem);
+        var postListItemSaved = repository.save(postListItem);
 
         DetailsPostListItemDTO dtoReturn = new DetailsPostListItemDTO(postListItem);
+
+        logService.newPostListLog(postListItemSaved, OperationType.CREATE);
+
 
         return ResponseEntity.ok(dtoReturn);
     }
@@ -60,6 +68,8 @@ public class PostListController {
 
         PostListItem postListItem = repository.getReferenceById(id);
 
+        logService.newPostListLog(postListItem, OperationType.EDIT);
+
         service.updatePostList(postListItem, dto);
 
         DetailsPostListItemDTO dtoResponse = new DetailsPostListItemDTO(postListItem);
@@ -73,6 +83,9 @@ public class PostListController {
         PostListItem postListItem = repository.getReferenceById(id);
         repository.delete(postListItem);
 
+        logService.newPostListLog(postListItem, OperationType.DELETE);
+
+
         return ResponseEntity.noContent().build();
     }
 
@@ -83,14 +96,20 @@ public class PostListController {
     public void makeOut(@PathVariable Long id){
         PostListItem postListItem = repository.getReferenceById(id);
 
+        logService.newPostListLog(postListItem, OperationType.DELIVERY);
+
+
         service.makeOut(postListItem);
     }
 
-    @GetMapping("/return/{id}")
+    @PostMapping("/return/{id}")
     @Transactional
     public void doReturnIten(@PathVariable Long id){
-        PostListItem pli = repository.getReferenceById(id);
-        service.doReturnItem(pli);
+        PostListItem postListItem = repository.getReferenceById(id);
+
+        logService.newPostListLog(postListItem, OperationType.RETURN);
+
+        service.doReturnItem(postListItem);
     }
 
     @PostMapping("/makeout/out")
@@ -98,6 +117,9 @@ public class PostListController {
     public void makeMultiOut(@RequestBody @Valid MakeMultiOut dto){
         for(Long id : dto.ids()){
             PostListItem postListItem = repository.getReferenceById(id);
+
+            logService.newPostListLog(postListItem, OperationType.DELIVERY);
+
             service.makeOut(postListItem);
         }
     }

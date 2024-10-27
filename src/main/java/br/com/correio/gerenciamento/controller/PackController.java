@@ -2,11 +2,13 @@ package br.com.correio.gerenciamento.controller;
 
 import br.com.correio.gerenciamento.domain.OMS.OMS;
 import br.com.correio.gerenciamento.domain.delivery.DeliveryPackDTO;
+import br.com.correio.gerenciamento.domain.logs.Objects.enums.OperationType;
 import br.com.correio.gerenciamento.domain.packs.DTO.CreatePackDTO;
 import br.com.correio.gerenciamento.domain.packs.DTO.UpdatePackDTO;
 import br.com.correio.gerenciamento.domain.packs.Pack;
 import br.com.correio.gerenciamento.domain.packs.PackRepository;
 import br.com.correio.gerenciamento.domain.packs.DTO.DetailsPackDTO;
+import br.com.correio.gerenciamento.service.logs.LogService;
 import br.com.correio.gerenciamento.service.pack.PackService;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
@@ -24,6 +26,8 @@ public class PackController {
     @Autowired
     private PackRepository repository;
 
+    @Autowired
+    private LogService logService;
 
     private final PackService service = new PackService();
 
@@ -38,7 +42,9 @@ public class PackController {
         DetailsPackDTO dto = new DetailsPackDTO(pack);
 
 
-        repository.save(pack);
+        var packSaved = repository.save(pack);
+
+        logService.newPackLog(packSaved, OperationType.CREATE);
 
         return ResponseEntity.ok(dto);
     }
@@ -73,6 +79,9 @@ public class PackController {
 
         DetailsPackDTO responseDto = new DetailsPackDTO(pack);
 
+        logService.newPackLog(pack, OperationType.EDIT);
+
+
         return ResponseEntity.ok(responseDto);
 
     }
@@ -81,6 +90,9 @@ public class PackController {
     @Transactional
     public ResponseEntity deletePack(@PathVariable Long id){
         Pack pack = repository.getReferenceById(id);
+
+        logService.newPackLog(pack, OperationType.DELETE);
+
 
         repository.delete(pack);
 
@@ -96,6 +108,9 @@ public class PackController {
 
         Pack pack = repository.getReferenceById(id);
 
+        logService.newPackLog(pack, OperationType.DELIVERY);
+
+
         service.doDeliveryPack(pack, dto.deliveredTo());
 
     }
@@ -105,6 +120,9 @@ public class PackController {
     public void doDeliveryMultiPacks(@RequestBody @Valid DeliveryPackDTO.DeliveryMultiPacksDTO dto){
         for(Long id : dto.ids()){
             Pack pack = repository.getReferenceById(id);
+
+            logService.newPackLog(pack, OperationType.DELIVERY);
+
 
             service.doDeliveryPack(pack, dto.deliveredTo());
         }
@@ -126,6 +144,16 @@ public class PackController {
         var packsNotDeliveredDTO = packsNotDelivered.stream().map(DetailsPackDTO::new).toList();
 
         return ResponseEntity.ok(packsNotDeliveredDTO);
+    }
+
+    @PostMapping("/return/{id}")
+    @Transactional
+    public void doReturnPack(@PathVariable Long id){
+        Pack pack = repository.getReferenceById(id);
+
+        logService.newPackLog(pack, OperationType.RETURN);
+
+        service.doReturnPack(pack);
     }
 
 //    ====================== SFPC ======================================
@@ -153,17 +181,13 @@ public class PackController {
         for(Long id : deliveryMultiPacksDTO.ids()){
             Pack pack = repository.getReferenceById(id);
 
+            logService.newPackLog(pack, OperationType.DELIVERY);
+
             service.doDeliveryPack(pack, deliveryMultiPacksDTO.deliveredTo());
         }
     }
 
-    @PostMapping("/return/{id}")
-    @Transactional
-    public void doReturnPack(@PathVariable Long id){
-        Pack pack = repository.getReferenceById(id);
 
-        service.doReturnPack(pack);
-    }
 //    ====================== RM ======================================
     @GetMapping("/5rm/pendent")
     public ResponseEntity<List<DetailsPackDTO>> list5RMNotDelivered(){
@@ -188,6 +212,8 @@ public class PackController {
     public void doDeliveryMultiPack5RM(@RequestBody @Valid DeliveryPackDTO.DeliveryMultiPacksDTO deliveryMultiPacksDTO){
         for (Long id : deliveryMultiPacksDTO.ids()){
             Pack pack = repository.getReferenceById(id);
+
+            logService.newPackLog(pack, OperationType.DELIVERY);
 
             service.doDeliveryPack(pack, deliveryMultiPacksDTO.deliveredTo());
         }

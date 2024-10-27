@@ -5,6 +5,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -21,13 +22,13 @@ public class TokenService {
     public String generateToken(User user){
         try{
             Algorithm algorithm = Algorithm.HMAC256(secret);
-            String token = JWT.create()
+
+            return JWT.create()
                     .withIssuer("gerenciamento_correio")
                     .withSubject(user.getLogin())
                     .withExpiresAt(generateExpirationDate())
                     .sign(algorithm);
 
-            return token;
         } catch(JWTCreationException exception){
             throw new RuntimeException("Error while generating token");
         }
@@ -49,4 +50,6 @@ public class TokenService {
     private Instant generateExpirationDate(){
         return LocalDateTime.now().plusHours(12).toInstant(ZoneOffset.of("-03:00")); //expira o Token 12 horas depois
     }
+
+
 }

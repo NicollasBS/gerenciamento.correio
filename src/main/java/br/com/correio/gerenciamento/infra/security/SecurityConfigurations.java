@@ -37,7 +37,10 @@ public class SecurityConfigurations {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.POST, "/auth/login").permitAll() //permitindo acesso ao endpoint de login e registro
                         .requestMatchers(HttpMethod.POST, "/auth/register").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.POST, "/postlist/return/", "/packs/return/").hasRole("ADMIN") //Qualquer requisição para estes Endpoints deverá estar logado como Admin
+                        .requestMatchers(HttpMethod.POST, "/postlist/return/{id}").hasRole("ADMIN") //Qualquer requisição para estes Endpoints deverá estar logado como Admin
+                        .requestMatchers(HttpMethod.POST, "/packs/return/{id}").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/packs/{id}").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/postlist/{id}").hasRole("ADMIN")
                         .anyRequest().authenticated() //demais requisições a requisição poderá ser feita como qualquer outra Role
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
@@ -48,8 +51,8 @@ public class SecurityConfigurations {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowedOrigins(List.of("*"));
-        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS")); // Allowed methods
-        config.setAllowedHeaders(List.of("Content-Type", "Authorization")); // Allowed headers
+        config.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
+        config.setAllowedHeaders(List.of("Content-Type", "Authorization"));
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
