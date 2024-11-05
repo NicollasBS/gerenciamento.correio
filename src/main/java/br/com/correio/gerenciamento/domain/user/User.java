@@ -33,10 +33,11 @@ public class User implements UserDetails {
     // verificará as ROLES do usuário
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        if(this.role == UserRole.ADMIN){
+        if (this.role == UserRole.ROLE_DEV) {
+            return List.of(new SimpleGrantedAuthority("ROLE_DEV"), new SimpleGrantedAuthority("ROLE_ADMIN"), new SimpleGrantedAuthority("ROLE_USER"));
+        } else if(this.role == UserRole.ROLE_ADMIN){
             return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"), new SimpleGrantedAuthority("ROLE_USER"));
-        }
-        else{
+        } else{
             return List.of(new SimpleGrantedAuthority("USER_ROLE"));
         }
     }

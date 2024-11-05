@@ -95,8 +95,14 @@ public class AuthenticationController {
         Map<String, Boolean> response = new HashMap<>();
         response.put("isAdmin", authService.isAdmin());
 
-        System.out.println(authService.isAdmin());
-
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/isDev")
+    public ResponseEntity isDev(){
+        Map<String, Boolean> response = new HashMap<>();
+        response.put("isDev", authService.isDev());
+
+        return  ResponseEntity.ok(response);
     }
 }

@@ -1,2 +1,0 @@
-ALTER TABLE logs DROP INDEX login;
-

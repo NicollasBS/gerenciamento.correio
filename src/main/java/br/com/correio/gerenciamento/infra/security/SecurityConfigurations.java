@@ -41,6 +41,8 @@ public class SecurityConfigurations {
                         .requestMatchers(HttpMethod.POST, "/packs/return/{id}").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/packs/{id}").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/postlist/{id}").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/user/login_log_by_user/{user}").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/user/objects_log_by_user/{user}").hasRole("ADMIN")
                         .anyRequest().authenticated() //demais requisições a requisição poderá ser feita como qualquer outra Role
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
@@ -50,7 +52,7 @@ public class SecurityConfigurations {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of("*"));
+        config.setAllowedOrigins(List.of("*", "10.10.3.229"));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("Content-Type", "Authorization"));
 
